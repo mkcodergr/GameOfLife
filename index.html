@@ -1,0 +1,44 @@
+<!DOCTYPE>
+<html>
+	<head>
+		<title>Conway's Game of Life</title>
+		<script type="text/javascript" src="gameoflife.js"></script>
+		<style type="text/css">
+			td {
+				background: #ddd;
+				width: 7px;
+				height: 7px;
+				border: 0;
+				padding: 0;
+				margin: 0;
+			}
+			#tooltip {
+				background: #fff;
+				border: 1px solid #ccc;
+				font-family: Consolas;
+				font-size: 12px;
+				width: 250px;
+				display: none;
+				position: absolute;
+				padding: 5px;
+			}
+			.bold {
+				font-weight: bold;
+			}
+			h2 {
+				margin: 0px;
+			}
+		</style>
+	</head>
+<body>
+	<table id="board">
+
+	</table>
+
+	<div id="tooltip">
+		<h2>Tooltip</h2>
+		<span class="bold">Action: </span> <span id="action"></span> <br />
+		<span class="bold">Neighbors: </span><span id="neighbors">Action: </span>
+	</div>
+</body>
+</html>
