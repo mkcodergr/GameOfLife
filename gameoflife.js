@@ -1,10 +1,13 @@
 "use strict";
+var interval, GOL;
 window.onload = function() {
-	var GOL = {
+	GOL = {
 
+		fieldSize: 10,
 		board: [],
 		mouseX: 0,
 		mouseY: 0,
+		mDown: false,
 
 		makeBoard: function(id, sizex, sizey) {
 			var self = this;
@@ -43,7 +46,7 @@ window.onload = function() {
 			var countCells = 0;
 			for(var x=-1; x <= 1; ++x) {
 				for(var y=-1; y <= 1; ++y) {
-					if(this.isAlive(cx + x, cy + y)) {
+					if(this.isAlive(cx + x, cy + y) && (x!=0 || y!=0)) { // Do not count yourself
 						countCells++;
 					}
 				}
@@ -91,15 +94,23 @@ window.onload = function() {
 			for(var i=0; i < actions.length; ++i) {
 				if(actions[i].action == 1) { // Rebirth
 					this.board[actions[i].y][actions[i].x] = true;
+					document.getElementById(actions[i].x + 'x' + actions[i].y).style.backgroundColor = '#00ff00';
 				} else { // Die
 					this.board[actions[i].y][actions[i].x] = false;
+					document.getElementById(actions[i].x + 'x' + actions[i].y).style.backgroundColor = '#ddd';
 				}
 			}
-			this.populateBoard();
 		},
 
 		step: function() {
 			this.performActions(this.getActions());
+		},
+
+		clear: function() {
+			for(var y=0; y < this.board.length; ++y) 
+				for(var x=0; x < this.board[y].length; ++x) 
+					this.board[y][x] = false;
+			this.populateBoard();
 		},
 
 		displayTooltip: function(x, y) {
@@ -111,6 +122,8 @@ window.onload = function() {
 			div.style.top = this.mouseY + 'px';
 			document.getElementById('neighbors').innerHTML = neighbors;
 			document.getElementById('action').innerHTML = (action == 2) ? 'kill' : (action==1) ? 'Rebirth' : 'Nothing';
+			document.getElementById('x').innerHTML = x;
+			document.getElementById('y').innerHTML = y;
 		},
 
 		hideTooltip: function() {
@@ -120,15 +133,35 @@ window.onload = function() {
 		mouseMove: function(e) {
 			GOL.mouseX = e.pageX;
 			GOL.mouseY = e.pageY;
-		}
+
+			if(GOL.mDown) {
+				var x = parseInt(GOL.mouseX / (GOL.fieldSize+2)); // 7px td + 2px tableborder
+				var y = parseInt(GOL.mouseY / (GOL.fieldSize+2));
+				GOL.board[y][x] = true;
+			}
+		},
+
+		mouseDown: function() {GOL.mDown = true;},
+		mouseUp: function() {GOL.mDown = false;GOL.populateBoard();}
 	};
 
 	document.onmousemove = GOL.mouseMove;
+	document.onmousedown = GOL.mouseDown;
+	document.onmouseup = GOL.mouseUp;
 
 	GOL.makeBoard('board', 150, 100);
-	for(var i=0; i < 21;++i) {
-		GOL.board[10][i] = true;
-	}
-	GOL.populateBoard();
-	setInterval(function(){GOL.step();}, 300);
 };
+
+function toggle() {
+	if(document.getElementById('startbutton').value == 'Stop') {
+		clearInterval(interval);
+		document.getElementById('startbutton').value = 'Start';
+	} else {
+		interval = setInterval(function(){GOL.step()}, 300);
+		document.getElementById('startbutton').value = 'Stop';
+	}
+}
+
+function hideTooltip() {
+	document.getElementById('tooltip').style.display = 'none';
+}

@@ -4,10 +4,15 @@
 		<title>Conway's Game of Life</title>
 		<script type="text/javascript" src="gameoflife.js"></script>
 		<style type="text/css">
+			*:not(input) {
+				border: 0;
+				margin: 0;
+				padding: 0;
+			}
 			td {
 				background: #ddd;
-				width: 7px;
-				height: 7px;
+				width: 10px;
+				height: 10px;
 				border: 0;
 				padding: 0;
 				margin: 0;
@@ -22,6 +27,17 @@
 				position: absolute;
 				padding: 5px;
 			}
+
+			#settings {
+				background: #fff;
+				border: 1px solid #ccc;
+				position: absolute;
+				z-index: 10;
+				right: 50px;
+				top: 100px;
+				padding: 20px;
+			}
+
 			.bold {
 				font-weight: bold;
 			}
@@ -35,8 +51,16 @@
 
 	</table>
 
+	<div id="settings">
+		<input type="button" id="startbutton" value="Start" onclick="toggle()" />
+		<input type="button" id="clearbutton" value="Clear" onclick="GOL.clear()" />
+	</div>
+
 	<div id="tooltip">
-		<h2>Tooltip</h2>
+		<h2>
+			Tooltip (<span id='x'></span>|<span id='y'></span>)
+			<span style="float:right" onclick="hideTooltip()">[X]</span>
+		</h2>
 		<span class="bold">Action: </span> <span id="action"></span> <br />
 		<span class="bold">Neighbors: </span><span id="neighbors">Action: </span>
 	</div>
