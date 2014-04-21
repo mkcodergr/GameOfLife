@@ -1,68 +1,74 @@
-<!DOCTYPE>
-<html>
-	<head>
-		<title>Conway's Game of Life</title>
-		<script type="text/javascript" src="gameoflife.js"></script>
-		<style type="text/css">
-			*:not(input) {
-				border: 0;
-				margin: 0;
-				padding: 0;
-			}
-			td {
-				background: #ddd;
-				width: 10px;
-				height: 10px;
-				border: 0;
-				padding: 0;
-				margin: 0;
-			}
-			#tooltip {
-				background: #fff;
-				border: 1px solid #ccc;
-				font-family: Consolas;
-				font-size: 12px;
-				width: 250px;
-				display: none;
-				position: absolute;
-				padding: 5px;
-			}
+	<!DOCTYPE>
+	<html>
+		<head>
+			<title>Conway's Game of Life</title>
+			<script type="text/javascript" src="gameoflife.js"></script>
+			<style type="text/css">
+				*:not(input) {
+					border: 0;
+					margin: 0;
+					padding: 0;
+					font-family: Verdana;
+					font-size: 12px;
+				}
+				td {
+					background: #ddd;
+					width: 10px;
+					height: 10px;
+					border: 0;
+					padding: 0;
+					margin: 0;
+				}
+				#tooltip {
+					background: #fff;
+					border: 1px solid #ccc;
+					font-family: Consolas;
+					font-size: 12px;
+					width: 250px;
+					display: none;
+					position: absolute;
+					padding: 5px;
+					opacity: 0.8;
+				}
 
-			#settings {
-				background: #fff;
-				border: 1px solid #ccc;
-				position: absolute;
-				z-index: 10;
-				right: 50px;
-				top: 100px;
-				padding: 20px;
-			}
+				#settings {
+					background: #fff;
+					border: 1px solid #ccc;
+					position: absolute;
+					z-index: 10;
+					right: 50px;
+					top: 100px;
+					padding: 20px;
+				}
 
-			.bold {
-				font-weight: bold;
-			}
-			h2 {
-				margin: 0px;
-			}
-		</style>
-	</head>
-<body>
-	<table id="board">
+				.bold {
+					font-weight: bold;
+				}
+				h2 {
+					margin: 0px;
+				}
+			</style>
+		</head>
+	<body>
+		<table id="board">
 
-	</table>
+		</table>
 
-	<div id="settings">
-		<input type="button" id="startbutton" value="Start" onclick="toggle()" />
-		<input type="button" id="clearbutton" value="Clear" onclick="GOL.clear()" />
-	</div>
+		<div id="settings">
+			<input type="button" id="startbutton" value="Start" onclick="toggle()" />
+			<input type="button" id="clearbutton" value="Clear" onclick="GOL.clear()" /> <br />
 
-	<div id="tooltip">
-		<h2>
-			Tooltip (<span id='x'></span>|<span id='y'></span>)
-			<span style="float:right" onclick="hideTooltip()">[X]</span>
-		</h2>
-		<span class="bold">Action: </span> <span id="action"></span> <br />
-		<span class="bold">Neighbors: </span><span id="neighbors">Action: </span>
-	</div>
-</body>
-</html>
+			Time between steps <input type="number" id="intervalTime" style="width: 75px;" value="300" /> ms <br />
+			Grid size <input type="number" style="width:70px;" value="100" id="gridx" /> x <input style="width:70px" type="number" id="gridy" value="50" />
+		</div>
+
+		<div id="tooltip">
+			<h2>
+				Tooltip (<span id='x'></span>|<span id='y'></span>)
+				<span style="float:right;cursor:hand;" onclick="hideTooltip()">[X]</span>
+			</h2>
+			<span class="bold">Action: </span> <span id="action"></span> <br />
+			<span class="bold">Neighbors: </span><span id="neighbors">Action: </span>
+		</div>
+	</body>
+	</html>

@@ -11,6 +11,7 @@ window.onload = function() {
 
 		makeBoard: function(id, sizex, sizey) {
 			var self = this;
+			this.board = [];
 			var table = document.getElementById(id);
 			if(!table) throw "Table "+id+" not found!";
 			for(var y=0; y < sizey; ++y) {
@@ -28,6 +29,15 @@ window.onload = function() {
 					this.board[y][x] = false;
 				}
 				table.appendChild(tr);
+			}
+		},
+
+		removeBoard: function(id) {
+			var board = document.getElementById(id);
+			var trs = board.getElementsByTagName('tr');
+			this.board = [];
+			while(trs.length > 0) { // While removing, trs.length shrinks
+				board.removeChild(trs[0]);
 			}
 		},
 
@@ -121,7 +131,7 @@ window.onload = function() {
 			div.style.left = this.mouseX + 'px';
 			div.style.top = this.mouseY + 'px';
 			document.getElementById('neighbors').innerHTML = neighbors;
-			document.getElementById('action').innerHTML = (action == 2) ? 'kill' : (action==1) ? 'Rebirth' : 'Nothing';
+			document.getElementById('action').innerHTML = (action == 2) ? 'Kill' : (action==1) ? 'Rebirth' : 'Nothing';
 			document.getElementById('x').innerHTML = x;
 			document.getElementById('y').innerHTML = y;
 		},
@@ -137,7 +147,8 @@ window.onload = function() {
 			if(GOL.mDown) {
 				var x = parseInt(GOL.mouseX / (GOL.fieldSize+2)); // 7px td + 2px tableborder
 				var y = parseInt(GOL.mouseY / (GOL.fieldSize+2));
-				GOL.board[y][x] = true;
+				if(typeof GOL.board[y] != 'undefined' && typeof GOL.board[y][x] != 'undefined') // Does the field actually exist?
+					GOL.board[y][x] = true;
 			}
 		},
 
@@ -148,20 +159,48 @@ window.onload = function() {
 	document.onmousemove = GOL.mouseMove;
 	document.onmousedown = GOL.mouseDown;
 	document.onmouseup = GOL.mouseUp;
+	document.getElementById('gridx').onchange = document.getElementById('gridy').onchange = function() {
+		rewriteBoard(valueInt('gridx'), valueInt('gridy'));
+	};
 
-	GOL.makeBoard('board', 150, 100);
+	GOL.makeBoard('board', valueInt('gridx'), valueInt('gridy'));
 };
 
 function toggle() {
 	if(document.getElementById('startbutton').value == 'Stop') {
 		clearInterval(interval);
 		document.getElementById('startbutton').value = 'Start';
+		disable(['gridx', 'gridy', 'intervalTime'], true);
 	} else {
-		interval = setInterval(function(){GOL.step()}, 300);
+		var intervalTime = valueInt('intervalTime');
+		interval = setInterval(function(){GOL.step()}, intervalTime);
 		document.getElementById('startbutton').value = 'Stop';
+		disable(['gridx', 'gridy', 'intervalTime']);
 	}
 }
 
 function hideTooltip() {
 	document.getElementById('tooltip').style.display = 'none';
+}
+
+function valueInt(id) {
+	var element = document.getElementById(id);
+	if(!element) throw "Element "+id+" not found";
+	var val = parseInt(element.value);
+	element.value = val; // User does not see his wrong input
+	return val;
+}
+
+function rewriteBoard(width, height) {
+	clearInterval(interval); // Stop processing
+	GOL.clear();
+	GOL.removeBoard('board');
+	GOL.makeBoard('board', width, height);
+}
+
+function disable(elements, enable) {
+	if(enable == null) enable = false;
+	for(var i=0; i < elements.length; ++i) {
+		document.getElementById(elements[i]).disabled = (enable) ? '' : 'disabled';
+	}
 }
